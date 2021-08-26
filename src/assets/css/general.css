@@ -1,0 +1,24 @@
+.align-center {
+    align-items: center;
+}
+
+.border-none {
+    border: none;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.outline-none {
+    outline: none;
+}
+
+.px {
+    padding-left: 5%;
+    padding-right: 5%;
+}
