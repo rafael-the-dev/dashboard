@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useMemo } from 'react';
 import './styles.css';
 import Button from '../../components/Button';
 import data from '../../data.json';
@@ -9,6 +9,20 @@ import Chart from '../../components/Chart';
 const Home = () => {
     const [ elements, setElements ] = useState([]);
     const dragged = useRef(null);
+
+    const emptyTable = useMemo(() => {
+        return (
+            <>
+                <thead className="thead-dark">
+                    <tr><th></th><th></th></tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td></td></tr>
+                    <tr><td></td><td></td></tr>
+                </tbody>
+            </>
+        );
+    }, [ ]);
 
     const classRemover = (event, className) => event.target.classList.remove(className);
     const addClass = (event, className) => event.target.classList.add(className);
@@ -54,6 +68,7 @@ const Home = () => {
                     tableOnDragOver={preventDefault}
                     tableOnDrop={tableOnDropHandler}
                     dragHandler={tabDragHandler}
+                    emptyTable={emptyTable}
                     role="table"
                 />;
             } else if(dragged.current.getAttribute('data-role')  === "table") {
@@ -62,6 +77,7 @@ const Home = () => {
                     data={data} 
                     id={key}
                     key={key}
+                    emptyTable={emptyTable}
                     tableOnDragEnter={tableOnDragEnterHandler}
                     tableOnDragLeave={tableOnDragLeaveHandler}
                     tableOnDragOver={preventDefault}

@@ -15,7 +15,3 @@
 .table__cell {
     padding: .5rem 1rem;
 }
-
-.table__cell--heading {
-    background-color: #ccc;
-}

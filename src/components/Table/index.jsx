@@ -1,50 +1,18 @@
 import { useEffect, useState } from 'react';
 import './styles.css';
 
-const Table = ({ dragged, id, data, role, tableOnDrop, tableOnDragEnter, tableOnDragLeave, tableOnDragOver, dragHandler }) => {
+const Table = ({ dragged, id, data, role, tableOnDrop, emptyTable, tableOnDragEnter, tableOnDragLeave, tableOnDragOver, dragHandler }) => {
     const [ columns, setColumns ] = useState([]);
-    const [ sortedData, setSortedData ] = useState([]);
-
-    const comparator = (key) => {
-        let sort = []
-        if(/^-?\d+(.?\d+)?/.test(data[0][key])) { 
-            sort = data.sort((a, b) => {
-                let x = parseFloat(a[key]);
-                let y = parseFloat(b[key]);
-
-                if (x > y) {
-                    return 1;
-                  }
-                  if (x < y) {
-                    return -1;
-                  }
-                  // a must be equal to b
-                  return 0;
-            });
-        } else {
-            sort = data.sort((a, b) => {
-                if (a[key] > b[key]) {
-                    return 1;
-                  }
-                  if (a[key] < b[key]) {
-                    return -1;
-                  }
-                  // a must be equal to b
-                  return 0;
-            });
-        }
-        
-        setSortedData(d => sort);
-    };
+    const [ canIUpdate, setCanIUpdate ] = useState(true);
 
     const createColumnn = () => {
         return (
-            sortedData
+            data
                 .map(item => columns.map( column => item[column]))
                 .map((item) => (
                     <tr key={Math.random() * 10} className="table__row">
                         {
-                            item.map((value, index) => <td className="table__cell" key={value + Math.random() * 100}>{ value }</td>)
+                            item.map(value => <td className="table__cell" key={value + Math.random() * 100}>{ value }</td>)
                         }
                     </tr>
                 ))
@@ -56,50 +24,61 @@ const Table = ({ dragged, id, data, role, tableOnDrop, tableOnDragEnter, tableOn
         tableOnDrop(columns, setColumns);
     };
 
+    const deleteColumn = event => {
+        const columnName = event.target.parentNode.getAttribute("data-key");
+        setColumns(c => c.filter(column => column !== columnName));
+        setCanIUpdate(b => false)
+    };
+
     useEffect(() => {
-        if((!columns.includes(dragged.current.id)) && (columns.length === 0)) {
+        if((!columns.includes(dragged.current.id)) && (columns.length === 0) && canIUpdate) {
             setColumns(c => [...c, dragged.current.id]);
         }
-    }, [ dragged, columns ]);
-
-    useEffect(() => setSortedData(d => data), [ data ]);
+    }, [ dragged, columns, canIUpdate ]);
 
     return (
-        columns && (
-            <div className="table-responsive">
-                <table 
-                    id={id}
-                    onDragEnter={tableOnDragEnter}
-                    onDragLeave={tableOnDragLeave}
-                    onDragOver={tableOnDragOver} 
-                    onDrop={onDropHandler}
-                    className="table table-hover table-bordered table-striped "
-                    draggable="true"
-                    data-role={role}
-                    onDragStart={dragHandler}
-                    >
-                    <thead className="thead-dark">
-                        <tr>
-                            {
-                                columns.map(column => (
-                                    <th 
-                                        key={column} 
-                                        data-key={column}
-                                        className="table__cell table__cell--heading"
-                                        onClick={event => comparator(event.target.getAttribute("data-key"))}>
-                                            { column }
-                                        </th>
-                                    )
-                                )
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { createColumnn() }
-                    </tbody>
-                </table>
-            </div>
-        )
+        <div className="table-responsive">
+            <table 
+                id={id}
+                onDragEnter={tableOnDragEnter}
+                onDragLeave={tableOnDragLeave}
+                onDragOver={tableOnDragOver} 
+                onDrop={onDropHandler}
+                className="table table-hover table-bordered table-striped "
+                draggable="true"
+                data-role={role}
+                onDragStart={dragHandler}
+                >
+                    {
+                        columns.length > 0 ? (
+                            <>
+                                <thead className="thead-dark">
+                                    <tr>
+                                        {
+                                            columns.map(column => (
+                                                <th 
+                                                    key={column} 
+                                                    data-key={column}
+                                                    className="table__cell table__cell--heading">
+                                                        { column }
+                                                        <span 
+                                                            className="fas fa-times text-danger table__cell--delete"
+                                                            onClick={deleteColumn}>
+                                                        </span>
+                                                    </th>
+                                                )
+                                            )
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    { createColumnn() }
+                                </tbody>
+                            </>
+                        ) : emptyTable
+                    }
+            </table>
+        </div>
     );
 };
 

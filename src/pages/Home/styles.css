@@ -32,6 +32,17 @@
     border: 1px dashed #ccc;
 }
 
+.table__cell--heading:hover .table__cell--delete {
+    display: inline-block;
+}
+
+.table__cell--delete {
+    display: none; 
+    font-size: 1rem;
+    margin-top: 1px;
+    margin-left: 10px;
+}
+
 @media screen and (min-width: 768px) {
     .header {
         padding-bottom: 1.5rem;
