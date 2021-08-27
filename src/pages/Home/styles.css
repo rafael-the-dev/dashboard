@@ -7,3 +7,11 @@
     font-size: 2rem;
     font-weight: 700;
 }
+
+.droppable-area {
+    min-height: 50vh;
+}
+
+.drag-enter {
+    border: 1px dashed #ccc;
+}

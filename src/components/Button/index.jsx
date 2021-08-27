@@ -1,8 +1,16 @@
 import './styles.css';
 
-const Button = ({ label, ariaLabel, className })  => {
+const Button = ({ id, label, role, ariaLabel, className, isDraggable, dragHandler })  => {
     return (
-        <button className={`button ${className}`} aria-label={ariaLabel}>{ label }</button>
+        <button 
+            id={id}
+            className={`button ${className}`} 
+            draggable={isDraggable ? "true" : "false"} 
+            aria-label={ariaLabel}
+            data-role={role}
+            onDragStart={dragHandler}>
+            { label }
+        </button>
     );
 };
 
