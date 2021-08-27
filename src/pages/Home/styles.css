@@ -1,3 +1,8 @@
+.px {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
 .header {
     padding-bottom: 1rem;
     padding-top: 1rem;
@@ -8,6 +13,15 @@
     font-weight: 700;
 }
 
+.main {
+    padding-bottom: 3rem;
+    padding-top: 2rem;
+}
+
+.table-responsive {
+    width: auto;
+}
+
 .droppable-area {
     min-height: 50vh;
     margin-top: .5rem;
@@ -16,4 +30,45 @@
 
 .drag-enter {
     border: 1px dashed #ccc;
+}
+
+@media screen and (min-width: 768px) {
+    .header {
+        padding-bottom: 1.5rem;
+        padding-top: 1.5rem;
+    }
+    
+    .main {
+        padding-top: 1rem;
+    }
+
+    .tabs-container {
+        width: 220px !important;
+    }
+
+    .droppable-area {
+        min-height: 84vh;
+        margin-top: 0rem;
+        margin-left: 5%;
+        overflow: hidden;
+        padding-bottom: 0;
+    }
+
+    .table-responsive {
+        min-width: 135px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .px {
+        padding-left: 7%;
+        padding-right: 7%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .px {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
 }

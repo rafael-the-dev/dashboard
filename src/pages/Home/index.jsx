@@ -20,12 +20,9 @@ const Home = () => {
     };
 
     const preventDefault = event => event.preventDefault();
-    const onDragEnterHandler = event => addClass(event, 'drag-enter');
-    const onDragLeaveHandler = event => classRemover(event, 'drag-enter');
 
     const tableOnDragEnterHandler = event => addClass(event, 'table--drag-enter');
     const tableOnDragLeaveHandler = event => classRemover(event, 'table--drag-enter');
-    
     const tableOnDropHandler = useCallback((columns, setColumns) => {
         if((dragged.current?.getAttribute('data-role')) === "column" && !( columns.includes(dragged.current?.id))) {
             setColumns(c => [...c, dragged.current?.id]);
@@ -35,6 +32,9 @@ const Home = () => {
     const chartOnDragEnterHandler = event => addClass(event, 'table--drag-enter');
     const chartOnDragLeaveHandler = event => classRemover(event, 'table--drag-enter');
 
+    
+    const onDragEnterHandler = event => addClass(event, 'drag-enter');
+    const onDragLeaveHandler = event => classRemover(event, 'drag-enter');
     const onDropHandler = event => {
         preventDefault(event);
         classRemover(event, 'drag-enter');
@@ -86,6 +86,7 @@ const Home = () => {
             }
             
             setElements(e => [...elements, table]);
+            console.log(elements)
         }
         event.stopPropagation();
     };
@@ -104,7 +105,7 @@ const Home = () => {
 
     return (
         <>
-            <header className="d-flex justify-between align-center px header">
+            <header className="d-flex justify-content-between align-items-center px header">
                 <h1 className="header__title">Dashboard</h1>
                 <div>
                     <Button 
@@ -132,8 +133,9 @@ const Home = () => {
                     />
                 </div>
             </header>
-            <main className="px">
-                <div className="d-flex align-center justify-start flex-wrap w-100">
+            <main className="px d-md-flex align-items-md-start main">
+                <div className="d-flex align-items-center justify-content-start flex-wrap w-100 flex-md-column align-items-md-stretch
+                    flex-md-grow-1 tabs-container">
                     {
                         Object.keys(data[0]).map(item => (
                             <Button 
@@ -153,7 +155,7 @@ const Home = () => {
                     onDragLeave={onDragLeaveHandler}
                     onDragOver={preventDefault} 
                     onDrop={onDropHandler} 
-                    className="d-flex flex-wrap w-100 droppable-area">
+                    className="d-flex flex-wrap w-100 align-items-md-start justify-content-around droppable-area">
                     {
                         elements
                     }
