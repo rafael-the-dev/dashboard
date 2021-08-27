@@ -10,6 +10,7 @@ const Home = () => {
     const dragged = useRef(null);
 
     const tabDragHandler = event => {
+        event.stopPropagation();console.log(event.target)
         dragged.current = event.target;
         event.dataTransfer.setData('text/plain',null);
     };
@@ -34,24 +35,32 @@ const Home = () => {
 
         if(event.target.id === "droppable-area") {
             if(dragged.current.getAttribute('data-role')  === "column") {
+                const key = Math.random() * 10;
                 table = <Table 
                     data={data} 
                     dragged={dragged}
-                    column={dragged.id} 
-                    key={Math.random() * 100}
+                    column={dragged.id}  
+                    id={key}
+                    key={key}
                     tableOnDragEnter={tableOnDragEnterHandler}
                     tableOnDragLeave={tableOnDragLeaveHandler}
                     tableOnDragOver={preventDefault}
                     tableOnDrop={tableOnDropHandler}
+                    dragHandler={tabDragHandler}
+                    role="table"
                 />;
             } else if(dragged.current.getAttribute('data-role')  === "table") {
+                const key = Math.random() * 10;
                 table = <CustomTable
                     data={data} 
-                    key={Math.random() * 10}
+                    id={key}
+                    key={key}
                     tableOnDragEnter={tableOnDragEnterHandler}
                     tableOnDragLeave={tableOnDragLeaveHandler}
                     tableOnDragOver={preventDefault}
+                    dragHandler={tabDragHandler}
                     tableOnDrop={tableOnDropHandler}
+                    role="table"
                 />
             }
             
@@ -61,6 +70,16 @@ const Home = () => {
     };
 
     const deleteAll = () => setElements(e => []);
+    const trashOnDragEnter = event => event.target.classList.add('trash--drag-enter')
+    const trashOnDragLeave = event => event.target.classList.remove('trash--drag-enter');
+    const trashOnDrop = event => {
+        preventDefault(event);
+        event.target.classList.remove('trash--drag-enter')
+        if(dragged.current.getAttribute('data-role') === 'table') {
+            const newElements = elements.filter(element => element.key !== dragged.current.id);
+            setElements(e => newElements);
+        }
+    }
 
     return (
         <>
@@ -79,6 +98,10 @@ const Home = () => {
                         ariaLabel="drop a component to delete it" 
                         className="fas  border-none fa-trash-alt header__button" 
                         onClickHandler={deleteAll}
+                        onDragEnter={trashOnDragEnter}
+                        onDragLeave={trashOnDragLeave}
+                        onDragOver={preventDefault} 
+                        onDrop={trashOnDrop}
                     />
                 </div>
             </header>

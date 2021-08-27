@@ -1,6 +1,7 @@
 import './styles.css';
 
-const Button = ({ id, label, role, ariaLabel, className, isDraggable, dragHandler, onClickHandler })  => {
+const Button = ({ id, label, role, ariaLabel, className, isDraggable, dragHandler, onClickHandler, onDragEnter,
+    onDragLeave, onDragOver, onDrop })  => {
     return (
         <button 
             id={id}
@@ -9,7 +10,12 @@ const Button = ({ id, label, role, ariaLabel, className, isDraggable, dragHandle
             aria-label={ariaLabel}
             data-role={role}
             onDragStart={dragHandler}
-            onClick={onClickHandler}>
+            onClick={onClickHandler}
+            onDragEnter={onDragEnter ? onDragEnter : null}
+            onDragLeave={onDragLeave ? onDragLeave : null}
+            onDragOver={onDragOver ? onDragOver : null} 
+            onDrop={onDrop ? onDrop : null}
+            >
             { label }
         </button>
     );

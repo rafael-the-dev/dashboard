@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './styles.css';
 
-const Table = ({ dragged, data, tableOnDrop, tableOnDragEnter, tableOnDragLeave, tableOnDragOver }) => {
+const Table = ({ dragged, id, data, role, tableOnDrop, tableOnDragEnter, tableOnDragLeave, tableOnDragOver, dragHandler }) => {
     const [ columns, setColumns ] = useState([]);
     const [ sortedData, setSortedData ] = useState([]);
 
@@ -44,7 +44,7 @@ const Table = ({ dragged, data, tableOnDrop, tableOnDragEnter, tableOnDragLeave,
                 .map((item) => (
                     <tr key={Math.random() * 10} className="table__row">
                         {
-                            item.map((value, index) => <td className="table__cell" key={value + 1}>{ value }</td>)
+                            item.map((value, index) => <td className="table__cell" key={value + Math.random() * 100}>{ value }</td>)
                         }
                     </tr>
                 ))
@@ -68,11 +68,15 @@ const Table = ({ dragged, data, tableOnDrop, tableOnDragEnter, tableOnDragLeave,
         columns && (
             <div className="table-responsive">
                 <table 
+                    id={id}
                     onDragEnter={tableOnDragEnter}
                     onDragLeave={tableOnDragLeave}
                     onDragOver={tableOnDragOver} 
                     onDrop={onDropHandler}
                     className="table table-hover table-bordered table-striped "
+                    draggable="true"
+                    data-role={role}
+                    onDragStart={dragHandler}
                     >
                     <thead className="thead-dark">
                         <tr>

@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import './styles.css'
 
 
-const CustomTable = ({ dragged, data, tableOnDrop, tableOnDragEnter, tableOnDragLeave, tableOnDragOver }) => {
+const CustomTable = ({ data, id, tableOnDrop, role,  tableOnDragEnter, tableOnDragLeave, tableOnDragOver, dragHandler }) => {
     const [ columns, setColumns ] = useState([]);
 
     const emptyTable = useMemo(() => {
@@ -22,11 +22,11 @@ const CustomTable = ({ dragged, data, tableOnDrop, tableOnDragEnter, tableOnDrag
     const createColumnn = () => {
         return (
             columns.map(column => (
-                <tr>
+                <tr key={Math.random() * 0.5}>
                     <td className={`table__cell table__heading`} key={column + 1}>{ column }</td>
                     {
                         data.map((item, index) => (
-                            <td className={`table__cell`} key={item[column] + 1}>{ item[column] }</td>
+                            <td className={`table__cell`} key={item[column] + Math.random() * 10}>{ item[column] }</td>
                         ))
                     }
                 </tr>
@@ -42,10 +42,14 @@ const CustomTable = ({ dragged, data, tableOnDrop, tableOnDragEnter, tableOnDrag
     return (
         <div className="table-responsive">
             <table 
+                id={id}
                 onDragEnter={tableOnDragEnter}
                 onDragLeave={tableOnDragLeave}
                 onDragOver={tableOnDragOver} 
                 onDrop={onDropHandler}
+                draggable="true"
+                onDragStart={dragHandler}
+                data-role={role}
                 className="table table-hover table-bordered table-striped ">
                     {
                         columns.length > 0 ? (
