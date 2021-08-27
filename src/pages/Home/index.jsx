@@ -4,23 +4,27 @@ import Button from '../../components/Button';
 import data from '../../data.json';
 import Table from '../../components/Table';
 import CustomTable from '../../components/CustomTable';
+import Chart from '../../components/Chart';
 
 const Home = () => {
     const [ elements, setElements ] = useState([]);
     const dragged = useRef(null);
 
+    const classRemover = (event, className) => event.target.classList.remove(className);
+    const addClass = (event, className) => event.target.classList.add(className);
+
     const tabDragHandler = event => {
-        event.stopPropagation();console.log(event.target)
+        event.stopPropagation();
         dragged.current = event.target;
         event.dataTransfer.setData('text/plain',null);
     };
 
     const preventDefault = event => event.preventDefault();
-    const onDragEnterHandler = event => event.target.classList.add('drag-enter');
-    const onDragLeaveHandler = event => event.target.classList.remove('drag-enter');
+    const onDragEnterHandler = event => addClass(event, 'drag-enter');
+    const onDragLeaveHandler = event => classRemover(event, 'drag-enter');
 
-    const tableOnDragEnterHandler = event => event.target.classList.add('table--drag-enter');
-    const tableOnDragLeaveHandler = event => event.target.classList.remove('table--drag-enter');
+    const tableOnDragEnterHandler = event => addClass(event, 'table--drag-enter');
+    const tableOnDragLeaveHandler = event => classRemover(event, 'table--drag-enter');
     
     const tableOnDropHandler = useCallback((columns, setColumns) => {
         if((dragged.current?.getAttribute('data-role')) === "column" && !( columns.includes(dragged.current?.id))) {
@@ -28,9 +32,12 @@ const Home = () => {
         }
     }, [ dragged ]);
 
+    const chartOnDragEnterHandler = event => addClass(event, 'table--drag-enter');
+    const chartOnDragLeaveHandler = event => classRemover(event, 'table--drag-enter');
+
     const onDropHandler = event => {
         preventDefault(event);
-        event.target.classList.remove('drag-enter');
+        classRemover(event, 'drag-enter');
         let table = "";
 
         if(event.target.id === "droppable-area") {
@@ -62,6 +69,20 @@ const Home = () => {
                     tableOnDrop={tableOnDropHandler}
                     role="table"
                 />
+            } else if(dragged.current.getAttribute('data-role')  === "chart") {
+                const key = Math.random() * 1000;
+                table = <Chart
+                    data={data}
+                    id={key}
+                    key={key}
+                    type="Bar"
+                    OnDragEnter={chartOnDragEnterHandler}
+                    OnDragLeave={chartOnDragLeaveHandler}
+                    OnDragOver={preventDefault}
+                    dragHandler={tabDragHandler}
+                    OnDrop={tableOnDropHandler}
+                    role="chart"
+                 />
             }
             
             setElements(e => [...elements, table]);
@@ -70,12 +91,12 @@ const Home = () => {
     };
 
     const deleteAll = () => setElements(e => []);
-    const trashOnDragEnter = event => event.target.classList.add('trash--drag-enter')
-    const trashOnDragLeave = event => event.target.classList.remove('trash--drag-enter');
+    const trashOnDragEnter = event => addClass(event, 'trash--drag-enter')
+    const trashOnDragLeave = event => classRemover(event, 'trash--drag-enter');
     const trashOnDrop = event => {
         preventDefault(event);
-        event.target.classList.remove('trash--drag-enter')
-        if(dragged.current.getAttribute('data-role') === 'table') {
+        classRemover(event, 'trash--drag-enter')
+        if(['table', 'chart'].includes(dragged.current.getAttribute('data-role'))) {
             const newElements = elements.filter(element => element.key !== dragged.current.id);
             setElements(e => newElements);
         }
@@ -93,7 +114,13 @@ const Home = () => {
                         role="table"
                         dragHandler={tabDragHandler}
                     />
-                    <Button ariaLabel="drag the button to create a chart" className="fas  border-none fa-chart-line header__button" />
+                    <Button 
+                        ariaLabel="drag the button to create a chart" 
+                        className="fas  border-none fa-chart-line header__button" 
+                        isDraggable
+                        role="chart"
+                        dragHandler={tabDragHandler}
+                    />
                     <Button 
                         ariaLabel="drop a component to delete it" 
                         className="fas  border-none fa-trash-alt header__button" 
