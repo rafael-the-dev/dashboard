@@ -1,27 +1,58 @@
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import './styles.css';
 import Button from '../../components/Button';
 import data from '../../data.json';
+import Table from '../../components/Table';
 
 const Home = () => {
-    //useEffect(() => console.log(Object.keys(data[0])));
-    const [ dragged, setDragged ] = useState(null);
+    const [ elements, setElements ] = useState([]);
+    const dragged = useRef(null);
 
-    const tabDragHandler = event => {
-        setDragged(d => event.target);
-        event.dataTransfer.setData('text/plain',null)
+    const tabDragHandler = async event => {
+        dragged.current = event.target;
+        event.dataTransfer.setData('text/plain',null);
     };
+
 
     const preventDefault = event => event.preventDefault();
     const onDragEnterHandler = event => event.target.classList.add('drag-enter');
     const onDragLeaveHandler = event => event.target.classList.remove('drag-enter');
-     
+
+    const tableOnDragEnterHandler = event => event.target.classList.add('table--drag-enter');
+    const tableOnDragLeaveHandler = event => event.target.classList.remove('table--drag-enter');
+    
+    const tableOnDropHandler = useCallback((columns, setColumns) => {
+        //console.log(columns)
+        //console.log(dragged)
+        console.log(dragged.current?.getAttribute('data-role'))
+        if((dragged.current?.getAttribute('data-role')) === "column" && !( columns.includes(dragged.current?.id))) {
+            console.log("yes")
+            setColumns(c => [...c, dragged.current?.id]);
+        }
+
+        console.log("after", columns)
+    }, [ dragged ]);
+
     const onDropHandler = event => {
         preventDefault(event);
         event.target.classList.remove('drag-enter');
-        if(dragged.getAttribute('data-role')  === "column") {
+        if(event.target.id === "droppable-area") {
+            if(dragged.current.getAttribute('data-role')  === "column") {
+                const table = <Table 
+                    data={data} 
+                    dragged={dragged}
+                    column={dragged.id} 
+                    key={Math.random() * 100}
+                    tableOnDragEnter={tableOnDragEnterHandler}
+                    tableOnDragLeave={tableOnDragLeaveHandler}
+                    tableOnDragOver={preventDefault}
+                    tableOnDrop={tableOnDropHandler}
+                />;
+                setElements(e => [...elements, table]);
+            }
         }
-    }
+        event.stopPropagation();
+    };
 
     return (
         <>
@@ -53,7 +84,9 @@ const Home = () => {
                     onDragOver={preventDefault} 
                     onDrop={onDropHandler} 
                     className="d-flex flex-wrap w-100 droppable-area">
-
+                    {
+                        elements
+                    }
                 </div>
             </main>
         </>

@@ -1,0 +1,21 @@
+
+.table-responsive {
+    max-height: 400px;
+    margin-top: 1.5rem;
+}
+
+.table--drag-enter {
+    border-color: rgb(9, 165, 212);
+}
+
+.table__row {
+    border: 1px solid #000;
+}
+
+.table__cell {
+    padding: .5rem 1rem;
+}
+
+.table__cell--heading {
+    background-color: #ccc;
+}

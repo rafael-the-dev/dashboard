@@ -10,6 +10,8 @@
 
 .droppable-area {
     min-height: 50vh;
+    margin-top: .5rem;
+    padding-bottom: 2rem;
 }
 
 .drag-enter {
