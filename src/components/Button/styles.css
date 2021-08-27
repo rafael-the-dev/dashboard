@@ -1,3 +1,7 @@
+.button {
+    outline: none !important;
+    border: none;
+}
 
 .header__button {
     font-size: 1.4rem;

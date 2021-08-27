@@ -72,7 +72,7 @@ const Table = ({ dragged, data, tableOnDrop, tableOnDragEnter, tableOnDragLeave,
                     onDragLeave={tableOnDragLeave}
                     onDragOver={tableOnDragOver} 
                     onDrop={onDropHandler}
-                    className="table able-hover table-bordered table-striped "
+                    className="table table-hover table-bordered table-striped "
                     >
                     <thead className="thead-dark">
                         <tr>
