@@ -5,7 +5,7 @@ const Button = ({ id, label, role, ariaLabel, className, isDraggable, dragHandle
     return (
         <button 
             id={id}
-            className={`button ${className}`} 
+            className={`button bg-transparent ${className}`} 
             draggable={isDraggable ? "true" : "false"} 
             aria-label={ariaLabel}
             data-role={role}

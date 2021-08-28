@@ -164,7 +164,7 @@ const Home = () => {
                         onMouseLeave={onMouseLeaveHandler}
                         >
                         <button 
-                            className="fas border-none header__button header__chart-button fa-chart-line button" 
+                            className="fas border-none header__button bg-transparent header__chart-button fa-chart-line button" 
                             >
                         </button>
                         <div 
