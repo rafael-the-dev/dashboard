@@ -12,4 +12,4 @@ the user is able to:
 * Click a delete button to clear working area
 
 Live site:
-https://pro-dashboard.netlify.app
+https://pro-live-dashboard.netlify.app
