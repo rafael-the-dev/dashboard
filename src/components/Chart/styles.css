@@ -1,6 +1,12 @@
 
-
 .chart-container {
     margin-top: 2rem;
     overflow: auto;
+    width: auto;
+}
+
+@media screen and (min-width: 768px) {
+    .chart-container {
+        width: 100%;
+    }
 }

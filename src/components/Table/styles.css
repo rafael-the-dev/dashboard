@@ -5,7 +5,7 @@
 }
 
 .table--drag-enter {
-    border-color: rgb(9, 165, 212);
+    border-color: #ccc;
 }
 
 .table__row {

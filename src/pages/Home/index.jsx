@@ -38,8 +38,14 @@ const Home = () => {
     const tableOnDragEnterHandler = event => addClass(event, 'table--drag-enter');
     const tableOnDragLeaveHandler = event => classRemover(event, 'table--drag-enter');
     const tableOnDropHandler = useCallback((columns, setColumns) => {
-        if((dragged.current?.getAttribute('data-role')) === "column" && !( columns.includes(dragged.current?.id))) {
+        if((dragged.current?.getAttribute('data-role') === "column") && !( columns.includes(dragged.current?.id))) {
             setColumns(c => [...c, dragged.current?.id]);
+        }
+    }, [ dragged ]);
+
+    const chartOnDropHandler = useCallback((groupKey, setGroupKry) => {
+        if((dragged.current?.getAttribute('data-role') === "column") && ( groupKey !== dragged.current?.id)) {
+            setGroupKry(c => dragged.current?.id);
         }
     }, [ dragged ]);
 
@@ -96,7 +102,7 @@ const Home = () => {
                     OnDragLeave={chartOnDragLeaveHandler}
                     OnDragOver={preventDefault}
                     dragHandler={tabDragHandler}
-                    OnDrop={tableOnDropHandler}
+                    OnDrop={chartOnDropHandler}
                     role="chart"
                  />
             }
