@@ -1,14 +1,16 @@
 import { useState } from "react";
+import ChartTable from "../ChartTable";
 import './styles.css'
 
 
 const CustomTable = ({ data, id, tableOnDrop, role,  tableOnDragEnter, tableOnDragLeave, tableOnDragOver, dragHandler,
-    emptyTable }) => {
+    emptyTable, chartData }) => {
     const [ columns, setColumns ] = useState([]);
+    const [ canIShowTableChart, setCanIShowTableChart ] = useState(false);
 
     const onDropHandler = event => {
         event.preventDefault();
-        tableOnDrop(columns, setColumns);
+        tableOnDrop(columns, setColumns, setCanIShowTableChart);
     };
 
     const deleteColumn = event => {
@@ -53,13 +55,16 @@ const CustomTable = ({ data, id, tableOnDrop, role,  tableOnDragEnter, tableOnDr
                 data-role={role}
                 className="table table-hover table-bordered table-striped ">
                     {
-                        columns.length > 0 ? (
-                            <>
-                                <tbody>
-                                    { createColumnn() }
-                                </tbody>
-                            </>
-                        ) : emptyTable 
+                        canIShowTableChart ? (<ChartTable columns={chartData[0]} data={chartData.slice(1)} />) :
+                            (
+                                columns.length > 0 ? (
+                                    <>
+                                        <tbody>
+                                            { createColumnn() }
+                                        </tbody>
+                                    </>
+                                ) : emptyTable 
+                            )
                     }
             </table>
         </div>

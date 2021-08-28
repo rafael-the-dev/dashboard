@@ -5,6 +5,20 @@
     width: auto;
 }
 
+.reload-button {
+    color: #000;
+    font-size: 1.4rem;
+    transition: all 1s;
+    top: 0;
+    right: 7%;
+}
+
+.reload-button:hover {
+    border: 1px solid #000;
+    color: rgb(27, 27, 27);
+    font-size: 1.2rem;
+}
+
 @media screen and (min-width: 768px) {
     .chart-container {
         width: 100%;

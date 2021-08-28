@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import GoogleChart from "react-google-charts";
 import './styles.css';
 
-const Chart = ({ id, type, data, OnDrop, role,  OnDragEnter, OnDragLeave, OnDragOver, dragHandler}) => {
+const Chart = ({ id, type, data, OnDrop, role, OnDragEnter, OnDragLeave, OnDragOver, dragHandler, setChartData}) => {
     const containerRef = useRef(null);
     const [ groupKey, setGroupKey ] = useState("");
     const [ columns, setColumns ] = useState([]);
@@ -40,10 +40,13 @@ const Chart = ({ id, type, data, OnDrop, role,  OnDragEnter, OnDragLeave, OnDrag
                 results.push(element);
             }
         });
-        console.log(results)
         results = results.map(element => columns.map(column => element[column]));
-        console.log(results)
+        setChartData([ columns, ...results ]);
         return results;
+    };
+
+    const reloadOnClickHandler = () => {
+        setColumns(c => [].concat(c));
     };
 
     useEffect(() => {
@@ -57,7 +60,7 @@ const Chart = ({ id, type, data, OnDrop, role,  OnDragEnter, OnDragLeave, OnDrag
     return (
         <div 
             ref={containerRef} 
-            className="chart-container"
+            className="chart-container position-relative"
             id={id}
             onDragEnter={OnDragEnter}
             onDragLeave={OnDragLeave}
@@ -82,7 +85,11 @@ const Chart = ({ id, type, data, OnDrop, role,  OnDragEnter, OnDragLeave, OnDrag
                     }}
                     // For tests
                     rootProps={{ 'data-testid': '2' }}
-                    />
+                />
+                <button 
+                    onClick={reloadOnClickHandler}
+                    className="fas fa-redo-alt btn btn-outline-light bg-transparent position-absolute reload-button">
+                </button>
         </div>
     );
 };

@@ -8,6 +8,8 @@ import Chart from '../../components/Chart';
 
 const Home = () => {
     const [ elements, setElements ] = useState([]);
+    const [ chartData, setChartData ] = useState([]);
+
     const dragged = useRef(null);
 
     const emptyTable = useMemo(() => {
@@ -37,9 +39,13 @@ const Home = () => {
 
     const tableOnDragEnterHandler = event => addClass(event, 'table--drag-enter');
     const tableOnDragLeaveHandler = event => classRemover(event, 'table--drag-enter');
-    const tableOnDropHandler = useCallback((columns, setColumns) => {
+    const tableOnDropHandler = useCallback((columns, setColumns, func) => {
         if((dragged.current?.getAttribute('data-role') === "column") && !( columns.includes(dragged.current?.id))) {
             setColumns(c => [...c, dragged.current?.id]);
+        } else if(dragged.current?.getAttribute('data-role') === "chart") {
+            if(func) {
+                func(true);
+            }
         }
     }, [ dragged ]);
 
@@ -75,6 +81,7 @@ const Home = () => {
                     tableOnDrop={tableOnDropHandler}
                     dragHandler={tabDragHandler}
                     emptyTable={emptyTable}
+                    chartData={chartData}
                     role="table"
                 />;
             } else if(dragged.current.getAttribute('data-role')  === "table") {
@@ -89,6 +96,7 @@ const Home = () => {
                     tableOnDragOver={preventDefault}
                     dragHandler={tabDragHandler}
                     tableOnDrop={tableOnDropHandler}
+                    chartData={chartData}
                     role="table"
                 />
             } else if(dragged.current.getAttribute('data-role')  === "chart") {
@@ -103,6 +111,7 @@ const Home = () => {
                     OnDragOver={preventDefault}
                     dragHandler={tabDragHandler}
                     OnDrop={chartOnDropHandler}
+                    setChartData={setChartData}
                     role="chart"
                  />
             }

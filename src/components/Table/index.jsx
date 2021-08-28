@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import ChartTable from '../ChartTable';
 import './styles.css';
 
-const Table = ({ dragged, id, data, role, tableOnDrop, emptyTable, tableOnDragEnter, tableOnDragLeave, tableOnDragOver, dragHandler }) => {
+const Table = ({ dragged, id, data, role, tableOnDrop, emptyTable, tableOnDragEnter, tableOnDragLeave, tableOnDragOver, dragHandler, chartData }) => {
     const [ columns, setColumns ] = useState([]);
     const [ canIUpdate, setCanIUpdate ] = useState(true);
+    const [ canIShowTableChart, setCanIShowTableChart ] = useState(false);
 
     const createColumnn = () => {
         return (
@@ -21,7 +23,7 @@ const Table = ({ dragged, id, data, role, tableOnDrop, emptyTable, tableOnDragEn
 
     const onDropHandler = event => {
         event.preventDefault();
-        tableOnDrop(columns, setColumns);
+        tableOnDrop(columns, setColumns, setCanIShowTableChart);
     };
 
     const deleteColumn = event => {
@@ -50,32 +52,35 @@ const Table = ({ dragged, id, data, role, tableOnDrop, emptyTable, tableOnDragEn
                 onDragStart={dragHandler}
                 >
                     {
-                        columns.length > 0 ? (
-                            <>
-                                <thead className="thead-dark">
-                                    <tr>
-                                        {
-                                            columns.map(column => (
-                                                <th 
-                                                    key={column} 
-                                                    data-key={column}
-                                                    className="table__cell table__cell--heading">
-                                                        { column }
-                                                        <span 
-                                                            className="fas fa-times text-danger table__cell--delete"
-                                                            onClick={deleteColumn}>
-                                                        </span>
-                                                    </th>
+                        canIShowTableChart ? (<ChartTable columns={chartData[0]} data={chartData.slice(1)} />) :
+                        (
+                            columns.length > 0  ? (
+                                <>
+                                    <thead className="thead-dark">
+                                        <tr>
+                                            {
+                                                columns.map(column => (
+                                                    <th 
+                                                        key={column} 
+                                                        data-key={column}
+                                                        className="table__cell table__cell--heading">
+                                                            { column }
+                                                            <span 
+                                                                className="fas fa-times text-danger table__cell--delete"
+                                                                onClick={deleteColumn}>
+                                                            </span>
+                                                        </th>
+                                                    )
                                                 )
-                                            )
-                                        }
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    { createColumnn() }
-                                </tbody>
-                            </>
-                        ) : emptyTable
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        { createColumnn() }
+                                    </tbody>
+                                </>
+                            ) : emptyTable
+                        )
                     }
             </table>
         </div>
