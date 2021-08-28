@@ -33,6 +33,7 @@
 }
 
 .droppable-area {
+    background: #efefef80;
     min-height: 50vh;
     margin-top: .5rem;
     padding-bottom: 2rem;
