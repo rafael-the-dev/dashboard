@@ -86,10 +86,6 @@
         padding-left: 7%;
         padding-right: 7%;
     }
-
-    .droppable-area {
-        width: 90%;
-    }
 }
 
 @media screen and (min-width: 1200px) {
