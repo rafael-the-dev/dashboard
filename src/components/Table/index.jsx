@@ -52,7 +52,12 @@ const Table = ({ dragged, id, data, role, tableOnDrop, emptyTable, tableOnDragEn
                 onDragStart={dragHandler}
                 >
                     {
-                        canIShowTableChart ? (<ChartTable columns={chartData[0]} data={chartData.slice(1)} />) :
+                        canIShowTableChart ? (
+                            <ChartTable 
+                                columns={chartData[0]} 
+                                data={chartData.slice(1)} 
+                                setCanIShowTableChart={setCanIShowTableChart}
+                            />) :
                         (
                             columns.length > 0  ? (
                                 <>

@@ -13,6 +13,16 @@
     font-weight: 700;
 }
 
+.header__chart-buttons-container {
+    padding-top: 10px;
+    top: 20px;
+    right: 0;
+}
+
+.header__chart-button:hover {
+    color: rgb(0, 56, 56);
+}
+
 .main {
     padding-bottom: 3rem;
     padding-top: 2rem;

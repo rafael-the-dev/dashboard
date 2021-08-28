@@ -11,6 +11,7 @@ const Home = () => {
     const [ chartData, setChartData ] = useState([]);
 
     const dragged = useRef(null);
+    const chartsButtonsContainer = useRef(null);
 
     const emptyTable = useMemo(() => {
         return (
@@ -36,6 +37,16 @@ const Home = () => {
     };
 
     const preventDefault = event => event.preventDefault();
+
+    const onMouseEnterHandler = event => {
+        addClass(event, "header__charts-container-toggle");
+        chartsButtonsContainer.current.classList.add('d-flex');
+    };
+
+    const onMouseLeaveHandler = event => {
+        classRemover(event, "header__charts-container-toggle");
+        chartsButtonsContainer.current.classList.remove('d-flex');
+    };
 
     const tableOnDragEnterHandler = event => addClass(event, 'table--drag-enter');
     const tableOnDragLeaveHandler = event => classRemover(event, 'table--drag-enter');
@@ -64,10 +75,11 @@ const Home = () => {
     const onDropHandler = event => {
         preventDefault(event);
         classRemover(event, 'drag-enter');
+        const dataRole = dragged.current.getAttribute('data-role');
         let table = "";
 
         if(event.target.id === "droppable-area") {
-            if(dragged.current.getAttribute('data-role')  === "column") {
+            if(dataRole  === "column") {
                 const key = Math.random() * 10;
                 table = <Table 
                     data={data} 
@@ -84,7 +96,7 @@ const Home = () => {
                     chartData={chartData}
                     role="table"
                 />;
-            } else if(dragged.current.getAttribute('data-role')  === "table") {
+            } else if(dataRole  === "table") {
                 const key = Math.random() * 10;
                 table = <CustomTable
                     data={data} 
@@ -99,13 +111,13 @@ const Home = () => {
                     chartData={chartData}
                     role="table"
                 />
-            } else if(dragged.current.getAttribute('data-role')  === "chart") {
+            } else if([ "Line", 'Column', 'Area' ].includes(dataRole)) {
                 const key = Math.random() * 1000;
                 table = <Chart
                     data={data}
                     id={key}
                     key={key}
-                    type="Bar"
+                    type={dataRole}
                     OnDragEnter={chartOnDragEnterHandler}
                     OnDragLeave={chartOnDragLeaveHandler}
                     OnDragOver={preventDefault}
@@ -141,18 +153,46 @@ const Home = () => {
                 <div>
                     <Button 
                         ariaLabel="drag the button to create a table" 
-                        className="fas fa-table border-none header__button" 
+                        className="fas fa-table border-none header__charts-container-toggle header__button" 
                         isDraggable
                         role="table"
                         dragHandler={tabDragHandler}
                     />
-                    <Button 
-                        ariaLabel="drag the button to create a chart" 
-                        className="fas  border-none fa-chart-line header__button" 
-                        isDraggable
-                        role="chart"
-                        dragHandler={tabDragHandler}
-                    />
+                    <div 
+                        className="position-relative d-inline-block header__drop-down"
+                        onMouseEnter={onMouseEnterHandler}
+                        onMouseLeave={onMouseLeaveHandler}
+                        >
+                        <button 
+                            className="fas border-none header__button header__chart-button fa-chart-line button" 
+                            >
+                        </button>
+                        <div 
+                            ref={chartsButtonsContainer} 
+                            className="position-absolute d-none align-items-center header__chart-buttons-container">
+                            <Button 
+                                ariaLabel="drag the button to create a chart" 
+                                className="fas  border-none header__chart-button fa-chart-bar header__button" 
+                                isDraggable
+                                role="Column"
+                                dragHandler={tabDragHandler}
+                            />
+                            <Button 
+                                ariaLabel="drag the button to create a chart"
+                                className="fas  border-none header__chart-button fa-chart-area header__button" 
+                                isDraggable
+                                role="Area"
+                                dragHandler={tabDragHandler}
+                            />
+                            <Button 
+                                ariaLabel="drag the button to create a chart" 
+                                className="fas  border-none header__chart-button fa-chart-line header__button" 
+                                isDraggable
+                                role="Line"
+                                dragHandler={tabDragHandler}
+                            />
+                        </div>
+                    </div>
                     <Button 
                         ariaLabel="drop a component to delete it" 
                         className="fas  border-none fa-trash-alt header__button" 
@@ -197,3 +237,6 @@ const Home = () => {
 };
 
 export default Home;
+/**
+ * 
+ */

@@ -13,6 +13,39 @@ const Chart = ({ id, type, data, OnDrop, role, OnDragEnter, OnDragLeave, OnDragO
         OnDrop(groupKey, setGroupKey);
     };
 
+    const searchLessIndex = (array, start) => {
+        let minIndex = start;
+
+        if([ 'OrderDate', 'ShipDate', 'UnitPrice' ].includes(groupKey)) {
+            for(let index = start + 1; index < array.length; index++) {
+                let minIndexDate = new Date(array[minIndex][groupKey]);
+                let currentIndexDate = new Date(array[index][groupKey]);
+                if( currentIndexDate < minIndexDate) {
+                    minIndex = index;
+                }
+            }
+        } else {
+            for(let index = start + 1; index < array.length; index++) {
+                if(array[index][groupKey] < array[minIndex][groupKey]) {
+                    minIndex = index;
+                }
+            }
+        }
+        return minIndex;
+    }
+
+    const sort = (array) => {
+        const innerArray = [].concat(array);
+        for(let index = 0; index < innerArray.length; index++) {
+            let result = searchLessIndex(innerArray, index);
+            let tempElement = innerArray[result];
+            innerArray[result] = innerArray[index];
+            innerArray[index] = tempElement; 
+        }
+
+        return innerArray;
+    }
+
     const has = (array, element) => {
         let result = { contains: false, index: -1 };
 
@@ -40,6 +73,7 @@ const Chart = ({ id, type, data, OnDrop, role, OnDragEnter, OnDragLeave, OnDragO
                 results.push(element);
             }
         });
+        results = sort(results);
         results = results.map(element => columns.map(column => element[column]));
         setChartData([ columns, ...results ]);
         return results;
@@ -73,18 +107,22 @@ const Chart = ({ id, type, data, OnDrop, role, OnDragEnter, OnDragLeave, OnDragO
                 <GoogleChart
                     width={'100%'}
                     height={'500px'}
-                    chartType={type}
+                    chartType={`${type}Chart`}
                     loader={<div>Loading Chart</div>}
                     data={[columns, ...dataAsArray()]}
                     options={{
                         // Material design options
                         bar: { groupWidth: 50 },
                         chart: {
-                        title: `${type} Chart`,
+                            title: `${type} Chart`,
+                            orientation: 'horizontal'
                         },
+                        bars: 'vertical',
+                        hAxis: {
+                            title: groupKey,
+                        }
                     }}
                     // For tests
-                    rootProps={{ 'data-testid': '2' }}
                 />
                 <button 
                     onClick={reloadOnClickHandler}

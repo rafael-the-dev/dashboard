@@ -55,7 +55,12 @@ const CustomTable = ({ data, id, tableOnDrop, role,  tableOnDragEnter, tableOnDr
                 data-role={role}
                 className="table table-hover table-bordered table-striped ">
                     {
-                        canIShowTableChart ? (<ChartTable columns={chartData[0]} data={chartData.slice(1)} />) :
+                        canIShowTableChart ? (
+                            <ChartTable 
+                                columns={chartData[0]} 
+                                data={chartData.slice(1)} 
+                                setCanIShowTableChart={setCanIShowTableChart} 
+                            />) :
                             (
                                 columns.length > 0 ? (
                                     <>
